@@ -1,0 +1,7 @@
+br1.api.riotgames.com/lol/league/v4/entries/by-summoner/{encryptedSummonerId}
+
+
+id mia#223 = 4G6Iec0acrsbc9M4lOQ-5sbh3qc1lAJ9zY6yhUvetyqiUc_g4-79jysqLQ
+
+id Ferrugem#mia = dE6SYG4bLlZBj0wLVIayT3Hf8WSacFgY03nrxfKuL7_i_YI
+

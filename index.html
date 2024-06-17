@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeagueTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script type="text/javascript" src="js/jquery-3.7.1.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h2 {
+            color: #73ca8d;
+        }
+        .card {
+            background-color: #ffe4e1;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #a0ffc8;
+            border-bottom: 1px solid #ff69b4;
+        }
+        .card-body {
+            background-color: #e8fff6;
+        }
+        .elo-image {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>mia#223</h2>
+            </div>
+            <div class="card-body">
+                <div id="divisaoMia"></div>
+                <img id="imgMia" class="elo-image" src="" alt="Elo Image">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h2>Ferrugem#mia</h2>
+            </div>
+            <div class="card-body">
+                <div id="divisaoFerrugem"></div>
+                <img id="imgFerrugem" class="elo-image" src="" alt="Elo Image">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var token = 'RGAPI-3bfac857-7a33-44f2-8796-246afae813f0';
+
+            function getEloImage(tier) {
+                switch(tier) {
+                    case 'IRON': return 'images/iron.png';
+                    case 'BRONZE': return 'images/bronze.png';
+                    case 'SILVER': return 'images/silver.png';
+                    case 'GOLD': return 'images/gold.png';
+                    case 'PLATINUM': return 'images/platinum.png';
+                    case 'EMERALD': return 'images/emerald.png';
+                    case 'DIAMOND': return 'images/diamond.png';
+                    case 'MASTER': return 'images/master.png';
+                    case 'GRANDMASTER': return 'images/grandmaster.png';
+                    case 'CHALLENGER': return 'images/challenger.png';
+                    default: return '';
+                }
+            }
+            //ELO Mia
+            $.ajax({
+                url: 'https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/4G6Iec0acrsbc9M4lOQ-5sbh3qc1lAJ9zY6yhUvetyqiUc_g4-79jysqLQ?api_key=' + token,
+                type: 'GET',
+                success: function(data) {
+                    if (data.length > 0) {
+                        var elo = data[0].queueType === "RANKED_SOLO_5x5" ? data[0] : data[1];
+                        var tier = elo.tier;
+                        var rank = elo.rank;
+                        var wins = elo.wins;
+                        var losses = elo.losses;
+                        var leaguePoints = elo.leaguePoints;
+                        $('#divisaoMia').html(`
+                            <p>Elo: ${tier} ${rank} ${leaguePoints} PDL</p>
+                            <p>Vitórias: ${wins}</p>
+                            <p>Derrotas: ${losses}</p>
+                        `);
+                        $('#imgMia').attr('src', getEloImage(tier));
+                    } else {
+                        $('#divisaoMia').html('Nenhum dado encontrado.');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('#divisaoMia').html('Erro ao carregar os dados: ' + textStatus + '<br>' + errorThrown);
+                }
+            });
+
+            //ELO Ferrugem
+            $.ajax({
+                url: 'https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/dE6SYG4bLlZBj0wLVIayT3Hf8WSacFgY03nrxfKuL7_i_YI?api_key=' + token,
+                type: 'GET',
+                success: function(data) {
+                    if (data.length > 0) {
+                        var elo = data[0].queueType === "RANKED_SOLO_5x5" ? data[0] : data[1];
+                        var tier = elo.tier;
+                        var rank = elo.rank;
+                        var wins = elo.wins;
+                        var losses = elo.losses;
+                        var leaguePoints = elo.leaguePoints;
+                        $('#divisaoFerrugem').html(`
+                            <p>Elo: ${tier} ${rank} ${leaguePoints} PDL</p>
+                            <p>Vitórias: ${wins}</p>
+                            <p>Derrotas: ${losses}</p>
+                        `);
+                        $('#imgFerrugem').attr('src', getEloImage(tier));
+                    } else {
+                        $('#divisaoFerrugem').html('Nenhum dado encontrado.');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('#divisaoFerrugem').html('Erro ao carregar os dados: ' + textStatus + '<br>' + errorThrown);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
